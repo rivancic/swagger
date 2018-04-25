@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.rivancic.swagger</groupId>
+  <artifactId>test-api-model</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <name>Test swagger Api Model</name>
+  <description>Generates the code from the swagger definition. The models are deployed to archiva.</description>
+  <url>https://swagger.rivancic.com</url>
+
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <url>{release-url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <url>{snapshot-url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>releases</id>
+      <name>Release Repository</name>
+      <url>{release-url}</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>snapshots</id>
+      <name>Snapshot Repository</name>
+      <url>{snapshot-url}</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <default.package>com.rivancic.swagger.api</default.package>
+    <swagger.definition>test.yaml</swagger.definition>
+    <swagger.version>2.2.2</swagger.version>
+    <swagger.language>spring</swagger.language>
+    <generated.project.name>generated</generated.project.name>
+    <version.compiler.plugin>3.3</version.compiler.plugin>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-codegen</artifactId>
+      <version>${swagger.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>generated/src</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.compiler.plugin}</version>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <excludes>
+            <exclude>**/controller/*.java</exclude>
+            <exclude>**/io/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven.source.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-codegen-maven-plugin</artifactId>
+        <version>${swagger.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${swagger.definition}</inputSpec>
+              <language>${swagger.language}</language>
+              <output>${basedir}/${generated.project.name}</output>
+              <apiPackage>${default.package}.controller</apiPackage>
+              <modelPackage>${default.package}.model</modelPackage>
+              <invokerPackage>${default.package}</invokerPackage>
+              <configOptions>
+                <sourceFolder>src/main/java</sourceFolder>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
