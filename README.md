@@ -2,7 +2,7 @@
 
 Simple project that shows maven setup for swagger code generation.
 
-Short tutorial on <a href="https://www.rivancic.com/swagger">Rivancic.com</a>
+Short tutorial on <a href="https://www.rivancic.com/posts/swagger">Rivancic.com</a>
 
 ## What does it do?
 
